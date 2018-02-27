@@ -1,6 +1,6 @@
-package POP3Client.view_component;
+package by.maribo.pop3client.view_component;
 
-import POP3Client.controller.ClientController;
+import by.maribo.pop3client.controller.ClientController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +8,10 @@ import java.awt.*;
 public class MainFrame {
 	private JFrame mainFrame = new JFrame("POP3 Client");
 	private ResultPanel resultPanel;
+	private ConnectionPanel connectionPanel;
+	private LogInPanel logInPanel;
+	private CommandPanel commandPanel;
+
 
 	public MainFrame(ClientController controller) {
 		mainFrame.setLayout(new FlowLayout());
@@ -17,11 +21,11 @@ public class MainFrame {
 		mainFrame.setResizable(false);
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		ConnectionPanel connectionPanel = new ConnectionPanel(controller);
+		connectionPanel = new ConnectionPanel(controller);
 		mainFrame.add(connectionPanel.getConnectionPanel());
-		LogInPanel logInPanel = new LogInPanel(controller);
+		logInPanel = new LogInPanel(controller);
 		mainFrame.add(logInPanel.getLogInPanel());
-		CommandPanel commandPanel = new CommandPanel();
+		commandPanel = new CommandPanel(controller);
 		mainFrame.add(commandPanel.getCommandPanel());
 		resultPanel = new ResultPanel();
 		mainFrame.add(resultPanel.getResultPanel());
@@ -33,15 +37,13 @@ public class MainFrame {
 		resultPanel.writeResult(result);
 	}
 
-	public void clearResults() {
-		resultPanel.clearResults();
-	}
-
-	public JFrame getMainFrame() {
-		return mainFrame;
-	}
-
 	public void show() {
 		mainFrame.setVisible(true);
+	}
+
+	public void changeState(boolean connected, boolean authorized) {
+		connectionPanel.changeButtonState(connected);
+		logInPanel.changeState(connected, authorized);
+		commandPanel.changeState(authorized);
 	}
 }
