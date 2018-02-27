@@ -1,6 +1,9 @@
 package by.maribo.pop3client.domain;
 
 public class HeaderBuilder {
+	private static final String DATE = "Date";
+	private static final String FROM = "From";
+	private static final String SUBJECT = "Subject";
 	private String date;
 	private String from;
 	private String subject;
@@ -9,11 +12,11 @@ public class HeaderBuilder {
 	}
 
 	public void addToHeader(String name, String value) {
-		if (name.equals("Date")) {
+		if (name.equals(DATE)) {
 			date = value;
-		} else if (name.equals("From")) {
+		} else if (name.equals(FROM)) {
 			from = value;
-		} else if (name.equals("Subject")) {
+		} else if (name.equals(SUBJECT)) {
 			subject = value;
 		}
 	}

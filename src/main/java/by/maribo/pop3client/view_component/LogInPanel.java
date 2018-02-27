@@ -40,7 +40,7 @@ public class LogInPanel {
 		constraints.ipadx    = 250;
 		constraints.insets = new Insets(0, 0, 5, 0);
 
-		JTextField userTextField = new JTextField("clarkepierce786");
+		JTextField userTextField = new JTextField();
 		userTextField.setMaximumSize(new Dimension(500, 50));
 		logInPanel.add(userTextField, constraints);
 

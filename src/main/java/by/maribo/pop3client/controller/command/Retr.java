@@ -16,8 +16,8 @@ import static by.maribo.pop3client.util.ResponseCreator.readResponseLine;
 import static by.maribo.pop3client.util.Validator.validateDigitParameter;
 
 public class Retr implements Command {
-	private static final String DIV_DIR_AUTO = "<div.+>.*\\n";
-	private static final String DIV = ".*</div>\\n";
+	private static final String DIV_DIR_AUTO = "Content-Type: text/plain; charset=utf-8\\n";
+	private static final String DIV = "Content-Type: .+; charset=utf-8\\n";
 	private static final String LINE = "<div[^>]+>";
 	private static final String END = "</div>";
 	private int messageNumber;
@@ -49,27 +49,28 @@ public class Retr implements Command {
 				String value = response.substring(colonPosition + 2, response.length());
 				builder.addToHeader(headerName, value);
 			}
-			if (response.matches(DIV_DIR_AUTO)) {
-				response = response.replace("=\n", "");
-				body.append(response);
+			if (response.matches(DIV_DIR_AUTO) && fullInfo(builder)) {
 				break;
 			}
 		}
-
-		while (!(response = readResponseLine(client)).equals(END_OF_RESPONSE)) {
+		while (!(response = readResponseLine(client)).equals(DIV)) {
 			if (response.matches(DIV)) {
-				body.append(response);
 				break;
 			}
 			response = response.replace("=\n", "");
 			body.append(response);
 		}
+		while (!response.equals(END_OF_RESPONSE)) {
+			response = readResponseLine(client);
+		}
 		String messageBody = body.toString();
-		messageBody = messageBody.replaceAll("<br>","\n");
-		messageBody = messageBody.replaceAll(LINE, "\n\t\t");
-		messageBody = messageBody.replaceAll(END, "");
 		message.setHeader(builder.buildHeader());
 		message.setBody(messageBody);
 		return message.toString();
+	}
+
+	private boolean fullInfo(HeaderBuilder builder) {
+		final Message.Header header = builder.buildHeader();
+		return header.getSubject() != null && header.getFrom() != null && header.getDate() != null;
 	}
 }

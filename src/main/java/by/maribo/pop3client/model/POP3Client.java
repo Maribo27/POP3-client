@@ -76,9 +76,9 @@ public class POP3Client {
 
 	public void sendCommand(String command) throws ConnectionException {
 		try {
+			inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			outputStream.write(command);
 			outputStream.flush();
-			inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			createResponse();
 		} catch (IOException e) {
 			throw new ConnectionException("Error occurred while sending command");

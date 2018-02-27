@@ -41,7 +41,7 @@ public class ConnectionPanel {
 		constraints.ipadx    = 250;
 		constraints.insets = new Insets(0, 0, 5, 0);
 
-		JTextField hostTextField = new JTextField("pop.gmail.com");
+		JTextField hostTextField = new JTextField("pop.mail.ru");
 		hostTextField.setMaximumSize(new Dimension(500, 50));
 		connectionPanel.add(hostTextField, constraints);
 
